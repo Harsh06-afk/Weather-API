@@ -15,7 +15,7 @@ const userLocation = document.getElementById('location')
 const time = document.getElementById('time')
 const date = document.getElementById('date')
 const searchInput = document.getElementById('searchInput')
-
+const searchButtom = document.getElementById('mybtn')
 const monthNames = [
   'January',
   'February',
@@ -61,7 +61,12 @@ const getWeatherData = async () => {
       }
     })
 
-    
+   searchInput.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+      event.preventDefault();
+       searchButtom.click();
+     }
+    });
     const data = await Promise.all([currentWeather, forecast])
 
     
@@ -94,12 +99,9 @@ const getDirection = deg => {
 
 const updateDom = data => {
   console.log('🔥 updating', data)
-  // Current temperature
   currentTemperature.innerText = data[0].main.temp.toFixed(1)
 
   weatherIcon.src = `https://openweathermap.org/img/wn/${data[0].weather[0].icon}@2x.png`
-
-  // Description of the Current Weather
   weatherDescription.innerText = data[0].weather[0].main
 
   windSpeed.innerText = data[0].wind.speed.toFixed(1)
@@ -121,8 +123,6 @@ const updateDom = data => {
     hour: 'numeric',
     minute: 'numeric',
   })
-
-  // Do the same for Sunset
   sunset.innerText = sunsetTs.toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: 'numeric',
@@ -138,8 +138,6 @@ const updateDom = data => {
     hour: 'numeric',
     minute: 'numeric',
   })
-
-  // Get and format Current Date
   date.innerText = new Date(Date.now()).toLocaleString('en-US', {
     weekday: 'long',
     month: 'short',
